@@ -34,8 +34,10 @@ public class SafetyZoneSensor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (CanvasNotifications.Instance == null) return;
         if (other.gameObject != this.gameObject)
         {
+
             // Añadimos el objeto a nuestra lista de asistencia
             objetosDentro.Add(other);
             ActualizarEstado(); 
@@ -56,16 +58,19 @@ public class SafetyZoneSensor : MonoBehaviour
             if (esManoDerecha)
             {
                 BhapticsLibrary.Play(eventoManoDerecha);
+                CanvasNotifications.Instance.SetPeligroManoDerecha(true);
             }
             else if (esManoIzquierda)
             {
                 BhapticsLibrary.Play(eventoManoIzquierda);
+                CanvasNotifications.Instance.SetPeligroManoIzquierda(true);
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        if (CanvasNotifications.Instance == null) return;
         if (other.gameObject != this.gameObject)
         {
             // Tachamos el objeto de la lista cuando sale físicamente
@@ -91,11 +96,13 @@ public class SafetyZoneSensor : MonoBehaviour
                 {
                     // Ha salido un trozo derecho y ya no queda NADA derecho dentro
                     BhapticsLibrary.StopByEventId(eventoManoDerecha);
+                    CanvasNotifications.Instance.SetPeligroManoDerecha(false);
                 }
                 else if (esManoIzquierda && !QuedaManoDentro("left"))
                 {
                     // Ha salido un trozo izquierdo y ya no queda NADA izquierdo dentro
                     BhapticsLibrary.StopByEventId(eventoManoIzquierda);
+                    CanvasNotifications.Instance.SetPeligroManoIzquierda(false);
                 }
             }
         }
