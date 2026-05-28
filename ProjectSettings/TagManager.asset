@@ -6,6 +6,8 @@ TagManager:
   tags:
   - robot
   - SamplesInfoPanel
+  - Cabeza
+  - Torso
   layers:
   - Default
   - TransparentFX
