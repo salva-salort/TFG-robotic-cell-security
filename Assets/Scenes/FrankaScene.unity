@@ -12520,10 +12520,10 @@ MonoBehaviour:
   - {fileID: 183918484}
   - {fileID: 468697631}
   - {fileID: 454374608}
-  distanciaAvisoTorso: 0.8
-  distanciaAvisoCabeza: 0.6
-  eventoVibracionTorso: vibrar_chaleco
-  eventoVibracionCabeza: vibrar_diadema
+  distanciaAvisoTorso: 0.5
+  distanciaAvisoCabeza: 0.5
+  eventoVibracionTorso: torso
+  eventoVibracionCabeza: cabeza
 --- !u!4 &1801849167
 Transform:
   m_ObjectHideFlags: 0

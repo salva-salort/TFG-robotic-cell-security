@@ -1,10 +1,11 @@
 using UnityEngine;
+using Bhaptics.SDK2;
 
 public class SafetyProximityManager : MonoBehaviour
 {
     [Header("Referencias del Robot")]
     [Tooltip("Arrastra aquí TODOS los eslabones del robot que quieras monitorizar")]
-    public Transform[] eslabonesRobot; // <-- CAMBIO CLAVE: Ahora es una lista de eslabones
+    public Transform[] eslabonesRobot; 
 
     [Header("Configuración de Distancias (en metros)")]
     public float distanciaAvisoTorso = 0.8f;   
@@ -42,19 +43,17 @@ public class SafetyProximityManager : MonoBehaviour
         float distanciaMinimaTorso = float.MaxValue;
         float distanciaMinimaCabeza = float.MaxValue;
 
-        // Recorremos todos los eslabones del robot para encontrar cuál es el más cercano al operario
+        // Recorremos todos los eslabones del robot
         foreach (Transform eslabon in eslabonesRobot)
         {
             if (eslabon == null) continue;
 
-            // Distancia del torso a ESTE eslabón en concreto
             if (transformTorso != null)
             {
                 float dTorso = Vector3.Distance(eslabon.position, transformTorso.position);
                 if (dTorso < distanciaMinimaTorso) distanciaMinimaTorso = dTorso;
             }
 
-            // Distancia de la cabeza a ESTE eslabón en concreto
             if (transformCabeza != null)
             {
                 float dCabeza = Vector3.Distance(eslabon.position, transformCabeza.position);
@@ -62,7 +61,7 @@ public class SafetyProximityManager : MonoBehaviour
             }
         }
 
-        // --- CONTROL DE PROXIMIDAD DEL TORSO (Usando la distancia al eslabón más cercano) ---
+        // --- CONTROL DE PROXIMIDAD DEL TORSO ---
         if (transformTorso != null && distanciaMinimaTorso != float.MaxValue)
         {
             if (distanciaMinimaTorso <= distanciaAvisoTorso)
@@ -71,8 +70,10 @@ public class SafetyProximityManager : MonoBehaviour
                 {
                     CanvasNotifications.Instance.SetPeligroTorso(true);
                     torsoYaEnPeligro = true;
+                    
+                    // <-- CAMBIO: La vibración ahora solo se ejecuta una vez al entrar
+                    BhapticsLibrary.Play(eventoVibracionTorso); 
                 }
-                // BhapticsLibrary.Play(eventoVibracionTorso);
             }
             else
             {
@@ -93,8 +94,10 @@ public class SafetyProximityManager : MonoBehaviour
                 {
                     CanvasNotifications.Instance.SetPeligroCabeza(true);
                     cabezaYaEnPeligro = true;
+                    
+                    // <-- CAMBIO: La vibración ahora solo se ejecuta una vez al entrar
+                    BhapticsLibrary.Play(eventoVibracionCabeza); 
                 }
-                // BhapticsLibrary.Play(eventoVibracionCabeza);
             }
             else
             {

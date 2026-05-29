@@ -20,5 +20,9 @@ namespace Bhaptics.SDK2
         public const string LEFT_HAND_WARNING = "left_hand_warning";
         
         public const string RIGHT_HAND_WARNING = "right_hand_warning";
+        
+        public const string CABEZA = "cabeza";
+        
+        public const string TORSO = "torso";
     }
 }
