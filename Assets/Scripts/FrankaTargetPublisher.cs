@@ -92,7 +92,7 @@ public class FrankaTargetPublisher : MonoBehaviour
     {
         // Posición del cubo respecto a la base
         Vector3 posicionLocal = robotBase.InverseTransformPoint(targetCube.transform.position);
-        
+        posicionLocal.y += 0.17f;
         // Usamos los grados que has puesto en el Inspector de Unity
         Quaternion rotacionLocal = Quaternion.Euler(rotacionPinza);
         //Quaternion rotacionLocal = Quaternion.Inverse(robotBase.rotation) * targetCube.transform.rotation;

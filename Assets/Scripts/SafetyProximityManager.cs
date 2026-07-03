@@ -12,7 +12,8 @@ public class SafetyProximityManager : MonoBehaviour
     public float distanciaAvisoCabeza = 0.6f;  
 
     [Header("Eventos bHaptics")]
-    public string eventoVibracionTorso = "vibrar_chaleco";
+    public string eventoVibracionTorsoDelante = "torsodelante";
+    public string eventoVibracionTorsoDetras = "torsodetras";
     public string eventoVibracionCabeza = "vibrar_diadema";
 
     private Transform transformTorso;
@@ -43,6 +44,8 @@ public class SafetyProximityManager : MonoBehaviour
         float distanciaMinimaTorso = float.MaxValue;
         float distanciaMinimaCabeza = float.MaxValue;
 
+        Transform eslabonMasCercanoTorso = null;
+
         // Recorremos todos los eslabones del robot
         foreach (Transform eslabon in eslabonesRobot)
         {
@@ -51,7 +54,11 @@ public class SafetyProximityManager : MonoBehaviour
             if (transformTorso != null)
             {
                 float dTorso = Vector3.Distance(eslabon.position, transformTorso.position);
-                if (dTorso < distanciaMinimaTorso) distanciaMinimaTorso = dTorso;
+                if (dTorso < distanciaMinimaTorso)
+                {
+                    distanciaMinimaTorso = dTorso;
+                    eslabonMasCercanoTorso = eslabon; // Almacenamos el eslabón culpable
+                }
             }
 
             if (transformCabeza != null)
@@ -68,11 +75,26 @@ public class SafetyProximityManager : MonoBehaviour
             {
                 if (!torsoYaEnPeligro)
                 {
-                    CanvasNotifications.Instance.SetPeligroTorso(true);
+                    
                     torsoYaEnPeligro = true;
                     
-                    // <-- CAMBIO: La vibración ahora solo se ejecuta una vez al entrar
-                    BhapticsLibrary.Play(eventoVibracionTorso); 
+                    // Calculamos si ese eslabón concreto está delante o detrás del usuario
+                    Vector3 direccionAlRobot = (eslabonMasCercanoTorso.position - transformTorso.position).normalized;
+                    float resultadoDot = Vector3.Dot(transformTorso.forward, direccionAlRobot);
+                    bool esDelante = (resultadoDot >= 0);
+
+                    CanvasNotifications.Instance.SetPeligroTorso(true, esDelante);
+                    
+                    if (esDelante)
+                    {
+                        // El robot está en la zona frontal (ángulo de 180º delanteros)
+                        BhapticsLibrary.Play(eventoVibracionTorsoDelante); 
+                    }
+                    else
+                    {
+                        // El robot está en la espalda
+                        BhapticsLibrary.Play(eventoVibracionTorsoDetras); 
+                    }
                 }
             }
             else
@@ -95,7 +117,6 @@ public class SafetyProximityManager : MonoBehaviour
                     CanvasNotifications.Instance.SetPeligroCabeza(true);
                     cabezaYaEnPeligro = true;
                     
-                    // <-- CAMBIO: La vibración ahora solo se ejecuta una vez al entrar
                     BhapticsLibrary.Play(eventoVibracionCabeza); 
                 }
             }

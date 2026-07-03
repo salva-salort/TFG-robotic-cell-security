@@ -12,27 +12,26 @@ public class CanvasNotifications : MonoBehaviour
     [Header("Indicadores de Texto")]
     public TextMeshProUGUI textoManoDerecha; 
     public TextMeshProUGUI textoManoIzquierda;
-    public TextMeshProUGUI textoTorso;   // <-- NUEVO
-    public TextMeshProUGUI textoCabeza;  // <-- NUEVO
+    public TextMeshProUGUI textoTorso;   
+    public TextMeshProUGUI textoCabeza;  
 
     // Memoria del estado actual de cada zona háptica
     private bool derechaEnPeligro = false;
     private bool izquierdaEnPeligro = false;
-    private bool torsoEnPeligro = false;    // <-- NUEVO
-    private bool cabezaEnPeligro = false;   // <-- NUEVO
+    private bool torsoEnPeligro = false;    
+    private bool cabezaEnPeligro = false;   
+    
+    private bool torsoDelante = true; 
 
     void Awake()
     {
         if (Instance == null) { Instance = this; }
         else { Destroy(gameObject); return; }
 
-        // El monitor permanece siempre encendido
         if (fondoPanel != null) fondoPanel.SetActive(true);
 
         LimpiarPantalla();
     }
-
-    // --- FUNCIONES PARA ACTUALIZAR CADA "LUZ" INDEPENDIENTEMENTE ---
 
     public void SetPeligroManoDerecha(bool enPeligro)
     {
@@ -46,19 +45,19 @@ public class CanvasNotifications : MonoBehaviour
         ActualizarDashboard();
     }
 
-    public void SetPeligroTorso(bool enPeligro) // <-- NUEVO
+    public void SetPeligroTorso(bool enPeligro, bool esDelante = true) 
     {
         torsoEnPeligro = enPeligro;
+        torsoDelante = esDelante; // Guardamos la dirección
         ActualizarDashboard();
     }
 
-    public void SetPeligroCabeza(bool enPeligro) // <-- NUEVO
+    public void SetPeligroCabeza(bool enPeligro) 
     {
         cabezaEnPeligro = enPeligro;
         ActualizarDashboard();
     }
 
-    // --- RENDERIZADO DEL DASHBOARD ---
     private void ActualizarDashboard()
     {
         // 1. Mano Derecha
@@ -91,12 +90,12 @@ public class CanvasNotifications : MonoBehaviour
             }
         }
 
-        // 3. Torso (NUEVO)
+        // 3. Torso 
         if (textoTorso != null)
         {
             if (torsoEnPeligro)
             {
-                textoTorso.text = "[X] TORSO: VIBRANDO";
+                textoTorso.text = torsoDelante ? "[X] TORSO: VIBRANDO DELANTE" : "[X] TORSO: VIBRANDO DETRÁS";
                 textoTorso.color = Color.red;
             }
             else
@@ -106,7 +105,7 @@ public class CanvasNotifications : MonoBehaviour
             }
         }
 
-        // 4. Cabeza (NUEVO)
+        // 4. Cabeza
         if (textoCabeza != null)
         {
             if (cabezaEnPeligro)
@@ -121,17 +120,15 @@ public class CanvasNotifications : MonoBehaviour
             }
         }
 
-        // --- LÓGICA DEL PANEL TRASERO ---
-        // Si CUALQUIERA de las partes está en peligro, el fondo se tiñe de alerta
         if (fondoPanel != null)
         {
             if (derechaEnPeligro || izquierdaEnPeligro || torsoEnPeligro || cabezaEnPeligro)
             {
-                fondoPanel.GetComponent<Image>().color = new Color(0.3f, 0f, 0f); // Rojo oscuro industrial
+                fondoPanel.GetComponent<Image>().color = new Color(0.3f, 0f, 0f); 
             }
             else
             {
-                fondoPanel.GetComponent<Image>().color = Color.black; // Negro reposo
+                fondoPanel.GetComponent<Image>().color = Color.black; 
             }
         }
     }
@@ -142,6 +139,7 @@ public class CanvasNotifications : MonoBehaviour
         izquierdaEnPeligro = false;
         torsoEnPeligro = false;
         cabezaEnPeligro = false;
+        torsoDelante = true; // Reset por defecto
         ActualizarDashboard();
     }
 }
