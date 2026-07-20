@@ -1,0 +1,11 @@
+<linker>
+    <!-- Preserva el núcleo del conector de ROS -->
+    <assembly fullname="Unity.Robotics.ROSTCPConnector" preserve="all"/>
+    <assembly fullname="Unity.Robotics.ROSTCPConnector.Messages" preserve="all"/>
+    
+    <!-- Preserva los tipos de mensajes generados (ej. SensorMsgs, FrankaMsgs) -->
+    <assembly fullname="RosMessageTypes" preserve="all"/>
+
+    <!-- Preserva tus propios scripts y clases de la escena por si acaso -->
+    <assembly fullname="Assembly-CSharp" preserve="all"/>
+</linker>

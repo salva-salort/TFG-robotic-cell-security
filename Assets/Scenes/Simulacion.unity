@@ -5453,6 +5453,7 @@ GameObject:
   - component: {fileID: 742865439}
   - component: {fileID: 742865438}
   - component: {fileID: 742865437}
+  - component: {fileID: 742865440}
   m_Layer: 0
   m_Name: fr3
   m_TagString: robot
@@ -5475,8 +5476,8 @@ MonoBehaviour:
   selectedJoint: 
   selectedIndex: 0
   control: 0
-  stiffness: 1000
-  damping: 100
+  stiffness: 20000
+  damping: 2000
   forceLimit: 1000
   speed: 30
   torque: 100
@@ -5517,6 +5518,40 @@ Transform:
   - {fileID: 1864928739}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &742865440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 742865436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1123bf0264756424bb087a03b9e8956a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RobotHome
+  articulaciones:
+  - nombreArticulacion: 
+    articulationBody: {fileID: 1428411936}
+    anguloHomeGrados: 0
+  - nombreArticulacion: 
+    articulationBody: {fileID: 1518887141}
+    anguloHomeGrados: -45
+  - nombreArticulacion: 
+    articulationBody: {fileID: 1416622305}
+    anguloHomeGrados: 0
+  - nombreArticulacion: 
+    articulationBody: {fileID: 1718697103}
+    anguloHomeGrados: -135
+  - nombreArticulacion: 
+    articulationBody: {fileID: 2016325288}
+    anguloHomeGrados: 0
+  - nombreArticulacion: 
+    articulationBody: {fileID: 419325788}
+    anguloHomeGrados: 90
+  - nombreArticulacion: 
+    articulationBody: {fileID: 183918487}
+    anguloHomeGrados: 45
 --- !u!1 &752294042
 GameObject:
   m_ObjectHideFlags: 0
@@ -10407,7 +10442,7 @@ ArticulationBody:
     stiffness: 0
     damping: 0
     forceLimit: 87
-    target: -45
+    target: 0
     targetVelocity: 0
     driveType: 0
   m_YDrive:
@@ -11942,7 +11977,7 @@ ArticulationBody:
     stiffness: 0
     damping: 0
     forceLimit: 87
-    target: -135
+    target: 0
     targetVelocity: 0
     driveType: 0
   m_YDrive:
